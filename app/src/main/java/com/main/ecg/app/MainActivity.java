@@ -82,11 +82,19 @@ public class MainActivity extends ActionBarActivity {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 ECG_STRIP_PIC_URI=data.getData();
+
+                //get the pic and show it on a imageView
                 Bundle extras = data.getExtras();
                 Bitmap mImageBitmap = (Bitmap) extras.get("data");
 //                imageButton = (ImageButton) findViewById(R.id.camera_button);
                 iv= (ImageView) findViewById(R.id.imageView1);
                 iv.setImageBitmap(mImageBitmap);
+
+                // delegate the pic to the next window: "GridActivity2"
+                Intent goToGridView = new Intent(MainActivity.this, GridActivity2.class);
+                goToGridView.putExtra("pic", (Bitmap) extras.get("data"));
+                MainActivity.this.startActivity(goToGridView);
+
 
             }
         }
