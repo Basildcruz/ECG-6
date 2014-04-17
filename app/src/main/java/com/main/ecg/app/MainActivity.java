@@ -1,5 +1,6 @@
 package com.main.ecg.app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     public ImageButton imageButton;
     static final int TAKE_PIC_REQUEST = 1;
