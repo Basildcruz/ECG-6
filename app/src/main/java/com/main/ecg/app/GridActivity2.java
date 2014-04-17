@@ -1,6 +1,6 @@
 package com.main.ecg.app;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -17,6 +18,7 @@ import android.util.FloatMath;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +29,8 @@ import android.widget.ImageView;
 public class GridActivity2 extends ActionBarActivity implements View.OnTouchListener {
 
     public ImageView ivOnGrid;
+    public ImageView beginRuller;
+    public ImageView endRuller;
     public ImageView grid;
     public PointF offset=new PointF(); // the offset is the difference between the point of the press to the 0,0 point of the picture
     public Float initialTouchDistance;
@@ -34,6 +38,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     public Float initialRotation;
     public Float oldAngle;
     public PointF pivot= new PointF();
+    public boolean isPicLocked=false;
     DrawView drawView;
     FrameLayout MainLayout;
     private static final String TAG = "Touch" ;
@@ -58,7 +63,11 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 //                    .commit();
 //        }
 
-
+        //action bar settings
+        ActionBar ab = getActionBar();
+        ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
+        ab.setTitle("Measure RR distance");
+        ab.setSubtitle("peak to peak");
 
         // get the image from the camera or the gallery and display it on this activity
         Intent picIntent = getIntent();
@@ -72,7 +81,8 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         } else{
             String delegatedImagePath = (String) extras.get("picFromGallery");
             ivOnGrid= (ImageView) findViewById(R.id.picImageView);
-            ivOnGrid.setImageBitmap(BitmapFactory.decodeFile(delegatedImagePath));
+//            ivOnGrid.setImageBitmap(BitmapFactory.decodeFile(delegatedImagePath));
+            ivOnGrid.setImageBitmap(getScaledBitmap(delegatedImagePath, 800, 800));
         }
 
         //draw a grid
@@ -83,6 +93,16 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         //add move, zoom, and tilt capabilities to pic
         grid= (ImageView) findViewById(R.id.gridImageView);
         grid.setOnTouchListener(this);
+
+        //add rullers
+        //begin measure ruller
+        beginRuller =(ImageView) findViewById(R.id.beginRullerImageView);
+        beginRuller.setImageDrawable(getResources().getDrawable(R.drawable.right_ruller));
+
+        //end measure ruller
+        endRuller =(ImageView) findViewById(R.id.endRullerImageView);
+        endRuller.setImageDrawable(getResources().getDrawable(R.drawable.left_ruller));
+
 
     }
 
@@ -123,10 +143,11 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     // manage the move, zoom and tilt capabilities
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if(isPicLocked==false){
         ImageView view = (ImageView) v;
 
         // Dump touch event to log
-        dumpEvent(event);
+//        dumpEvent(event);
 
         // Handle touch events here...
 
@@ -191,7 +212,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
                 break;
 
         }
-
+        }
         return true; // indicate event was handled
     }
 
@@ -214,51 +235,94 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     }
 
     /** Show an event in the LogCat view, for debugging */
-    private void dumpEvent(MotionEvent event) {
-        String names[] = { "DOWN" , "UP" , "MOVE" , "CANCEL" , "OUTSIDE" ,
-                "POINTER_DOWN" , "POINTER_UP" , "7?" , "8?" , "9?" };
-        StringBuilder sb = new StringBuilder();
-        int action = event.getAction();
-        int actionCode = action & MotionEvent.ACTION_MASK;
-        sb.append("event ACTION_" ).append(names[actionCode]);
-        if (actionCode == MotionEvent.ACTION_POINTER_DOWN
-                || actionCode == MotionEvent.ACTION_POINTER_UP) {
-            sb.append("(pid " ).append(
-                    action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-            sb.append(")" );
-        }
-        sb.append("[" );
-        for (int i = 0; i < event.getPointerCount(); i++) {
-            sb.append("#" ).append(i);
-            sb.append("(pid " ).append(event.getPointerId(i));
-            sb.append(")=" ).append((int) event.getX(i));
-            sb.append("," ).append((int) event.getY(i));
-            if (i + 1 < event.getPointerCount())
-                sb.append(";" );
-        }
-        sb.append("]" );
-        Log.d(TAG, sb.toString());
+//    private void dumpEvent(MotionEvent event) {
+//        String names[] = { "DOWN" , "UP" , "MOVE" , "CANCEL" , "OUTSIDE" ,
+//                "POINTER_DOWN" , "POINTER_UP" , "7?" , "8?" , "9?" };
+//        StringBuilder sb = new StringBuilder();
+//        int action = event.getAction();
+//        int actionCode = action & MotionEvent.ACTION_MASK;
+//        sb.append("event ACTION_" ).append(names[actionCode]);
+//        if (actionCode == MotionEvent.ACTION_POINTER_DOWN
+//                || actionCode == MotionEvent.ACTION_POINTER_UP) {
+//            sb.append("(pid " ).append(
+//                    action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+//            sb.append(")" );
+//        }
+//        sb.append("[" );
+//        for (int i = 0; i < event.getPointerCount(); i++) {
+//            sb.append("#" ).append(i);
+//            sb.append("(pid " ).append(event.getPointerId(i));
+//            sb.append(")=" ).append((int) event.getX(i));
+//            sb.append("," ).append((int) event.getY(i));
+//            if (i + 1 < event.getPointerCount())
+//                sb.append(";" );
+//        }
+//        sb.append("]" );
+//        Log.d(TAG, sb.toString());
+//    }
+
+    //functions that suppose to help the images from the gallery not to crash
+    private Bitmap getScaledBitmap(String picturePath, int width, int height) {
+        BitmapFactory.Options sizeOptions = new BitmapFactory.Options();
+        sizeOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(picturePath, sizeOptions);
+
+        int inSampleSize = calculateInSampleSize(sizeOptions, width, height);
+
+        sizeOptions.inJustDecodeBounds = false;
+        sizeOptions.inSampleSize = inSampleSize;
+
+        return BitmapFactory.decodeFile(picturePath, sizeOptions);
     }
 
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            // Calculate ratios of height and width to requested height and
+            // width
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+            // Choose the smallest ratio as inSampleSize value, this will
+            // guarantee
+            // a final image with both dimensions larger than or equal to the
+            // requested height and width.
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+
+        return inSampleSize;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.grid_activity2, menu);
-        return true;
+
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.grid_activity2, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+//            case R.id.action_settings:
+//                openSettings();
+//                return true;
+            case R.id.action_lock_pic_movment:
+                isPicLocked=true;
+                return true;
+            case R.id.action_unlock_pic_movment:
+                isPicLocked=false;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     /**

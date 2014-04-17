@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     tools:context="com.main.ecg.app.GridActivity2"
     tools:ignore="MergeRootFrame"
-    android:background="@drawable/blue_gradient_1">
+    android:background="#ffffff">
+
+
 
     <ImageView android:id="@+id/gridImageView"
         android:layout_width="fill_parent"
@@ -21,6 +23,17 @@
         >
     </ImageView>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/beginRullerImageView"
+        android:layout_gravity="left|center_vertical" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/endRullerImageView"
+        android:layout_gravity="right|center_vertical" />
 
 
 </FrameLayout>
