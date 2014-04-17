@@ -94,9 +94,6 @@ public class MainActivity extends Activity {
                 //get the pic and show it on a imageView
                 Bundle extras = data.getExtras();
                 Bitmap mImageBitmap = (Bitmap) extras.get("data");
-//                cameraButton = (ImageButton) findViewById(R.id.camera_button);
-                iv= (ImageView) findViewById(R.id.imageView1);
-                iv.setImageBitmap(mImageBitmap);
 
                 // delegate the pic to the next window: "GridActivity2"
                 Intent goToGridView = new Intent(MainActivity.this, GridActivity2.class);

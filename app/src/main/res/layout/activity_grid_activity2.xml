@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.main.ecg.app.GridActivity2"
     tools:ignore="MergeRootFrame"
-
-    android:background="#FFFFFF">
+    android:background="@drawable/blue_gradient_1">
 
     <ImageView android:id="@+id/gridImageView"
         android:layout_width="fill_parent"
