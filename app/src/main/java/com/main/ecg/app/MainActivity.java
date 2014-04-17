@@ -2,10 +2,11 @@ package com.main.ecg.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,8 +23,11 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    public ImageButton imageButton;
+    public ImageButton cameraButton;
+    public ImageButton galleryButton;
+
     static final int TAKE_PIC_REQUEST = 1;
+    static  final int RESULT_LOAD_IMAGE=2;
     public Uri ECG_STRIP_PIC_URI;
     public ImageView iv;
 
@@ -42,6 +46,7 @@ public class MainActivity extends Activity {
 //        }
 
         addListenerOnButton();
+
         //hello!
 
 
@@ -50,19 +55,21 @@ public class MainActivity extends Activity {
 
     public void addListenerOnButton() {
 
-        imageButton = (ImageButton) findViewById(R.id.camera_button);
+        cameraButton = (ImageButton) findViewById(R.id.camera_button);
+        galleryButton= (ImageButton) findViewById(R.id.gallery_button);
 
-        imageButton.setOnClickListener(new OnClickListener() {
-
+//
+//        if(v.getId() == R.id.camera_button) {
+//            // do this
+//        }else if(v.getId() == R.id.button2) {
+//            // do that
+//        }
+        cameraButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Toast.makeText(MainActivity.this,
-                        "ImageButton is clicked!", Toast.LENGTH_SHORT).show();
-
-//                Intent browserIntent =
-//                        new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mkyong.com"));
-//                startActivity(browserIntent);
+                        "cameraButton is clicked!", Toast.LENGTH_SHORT).show();
 
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                startActivity(cameraIntent);
@@ -70,16 +77,29 @@ public class MainActivity extends Activity {
                 Bitmap ECG_STRIP_PIC;
 
                 startActivityForResult(cameraIntent, TAKE_PIC_REQUEST);
-                
 
             }
 
         });
 
+        galleryButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(MainActivity.this,
+                        "galleryButton is clicked!", Toast.LENGTH_SHORT).show();
+
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+            }
+        });
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //camera intent
         // Check which request we're responding to
         if (requestCode == TAKE_PIC_REQUEST) {
             // Make sure the request was successful
@@ -89,17 +109,56 @@ public class MainActivity extends Activity {
                 //get the pic and show it on a imageView
                 Bundle extras = data.getExtras();
                 Bitmap mImageBitmap = (Bitmap) extras.get("data");
-//                imageButton = (ImageButton) findViewById(R.id.camera_button);
+//                cameraButton = (ImageButton) findViewById(R.id.camera_button);
                 iv= (ImageView) findViewById(R.id.imageView1);
                 iv.setImageBitmap(mImageBitmap);
 
                 // delegate the pic to the next window: "GridActivity2"
                 Intent goToGridView = new Intent(MainActivity.this, GridActivity2.class);
-                goToGridView.putExtra("pic", (Bitmap) extras.get("data"));
+                goToGridView.putExtra("picFromCamera", (Bitmap) extras.get("data"));
                 MainActivity.this.startActivity(goToGridView);
 
 
             }
+
+        //gallery intent
+        } else if ((requestCode == RESULT_LOAD_IMAGE)){
+
+            if (resultCode == RESULT_OK) {
+//                ECG_STRIP_PIC_URI=data.getData();
+//
+//                //get the pic and show it on a imageView
+//                Bundle extras = data.getExtras();
+//                Bitmap mImageBitmap = (Bitmap) extras.get("data");
+////                cameraButton = (ImageButton) findViewById(R.id.camera_button);
+//                iv= (ImageView) findViewById(R.id.imageView1);
+//                iv.setImageBitmap(mImageBitmap);
+
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
+                cursor.close();
+//                ImageView imageView = (ImageView) findViewById(R.id.imgView);
+//                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+                //get the pic and show it on a imageView
+//                Bundle extras = data.getExtras();
+//                Bitmap mImageBitmap = (Bitmap) extras.get("data");
+//                cameraButton = (ImageButton) findViewById(R.id.camera_button);
+    //                iv= (ImageView) findViewById(R.id.imageView1);
+    //                iv.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+                // delegate the pic to the next window: "GridActivity2"
+                Intent goToGridView = new Intent(MainActivity.this, GridActivity2.class);
+                goToGridView.putExtra("picFromGallery", picturePath);
+                MainActivity.this.startActivity(goToGridView);
+
+
+            }
+
         }
     }
 

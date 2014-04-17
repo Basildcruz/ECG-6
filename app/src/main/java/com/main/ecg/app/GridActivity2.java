@@ -4,34 +4,36 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.FloatMath;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-public class GridActivity2 extends Activity implements View.OnTouchListener {
+public class GridActivity2 extends ActionBarActivity implements View.OnTouchListener {
 
     public ImageView ivOnGrid;
     public ImageView grid;
     public PointF offset=new PointF(); // the offset is the difference between the point of the press to the 0,0 point of the picture
+    public Float initialTouchDistance;
+    public Float initialScale;
+    public Float initialRotation;
+    public Float oldAngle;
+    public PointF pivot= new PointF();
     DrawView drawView;
     FrameLayout MainLayout;
     private static final String TAG = "Touch" ;
@@ -58,15 +60,25 @@ public class GridActivity2 extends Activity implements View.OnTouchListener {
 
 
 
-        // get the image from the camera and display it on this activity
+        // get the image from the camera or the gallery and display it on this activity
         Intent picIntent = getIntent();
         Bundle extras = picIntent.getExtras();
-        Bitmap delegatedImageBitmap = (Bitmap) extras.get("pic");
-        ivOnGrid=(ImageView) findViewById(R.id.picImageView);
-        ivOnGrid.setImageBitmap(delegatedImageBitmap);
+        //get pic from camera
+        if (extras.get("picFromCamera") instanceof Bitmap) {
+            Bitmap delegatedImageBitmap = (Bitmap) extras.get("picFromCamera");
+            ivOnGrid=(ImageView) findViewById(R.id.picImageView);
+            ivOnGrid.setImageBitmap(delegatedImageBitmap);
+        //get pic from gallery
+        } else{
+            String delegatedImagePath = (String) extras.get("picFromGallery");
+            ivOnGrid= (ImageView) findViewById(R.id.picImageView);
+            ivOnGrid.setImageBitmap(BitmapFactory.decodeFile(delegatedImagePath));
+        }
+
         //add zoom capabilities
         grid= (ImageView) findViewById(R.id.gridImageView);
         grid.setOnTouchListener(this);
+
 //        setContentView(R.layout.activity_grid_activity2);
 //        Context c= ivOnGrid.getContext();
 //
@@ -119,68 +131,7 @@ public class GridActivity2 extends Activity implements View.OnTouchListener {
         }
     }
 
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        ImageView view = (ImageView) v;
 //
-//        // Dump touch event to log
-//        dumpEvent(event);
-//
-//        // Handle touch events here...
-//        PointF start= new PointF();
-//        float oldDist;
-//        float newDist;
-//        PointF mid = new PointF();
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-//                savedMatrix.set(matrix);
-//                start.set(event.getX(), event.getY());
-//                Log.d(TAG, "mode=DRAG" );
-//                mode = DRAG;
-//                break;
-////            case MotionEvent.ACTION_POINTER_DOWN:
-////                oldDist = spacing(event);
-////                Log.d(TAG, "oldDist=" + oldDist);
-////                if (oldDist > 10f) {
-////                    savedMatrix.set(matrix);
-////                    midPoint(mid, event);
-////                    mode = ZOOM;
-////                    Log.d(TAG, "mode=ZOOM" );
-////                }
-////                break;
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_POINTER_UP:
-//                mode = NONE;
-//                Log.d(TAG, "mode=NONE" );
-//                break;
-//
-//            case MotionEvent.ACTION_MOVE:
-//                if (mode == DRAG) {
-//                    matrix.set(savedMatrix);
-//                    matrix.postTranslate(event.getX() - start.x-ivOnGrid.getX(),
-//                            event.getY() - start.y-ivOnGrid.getY());
-//                }
-////                else if (mode == ZOOM) {
-////                    newDist = spacing(event);
-////                    Log.d(TAG, "newDist=" + newDist);
-////                    if (newDist > 10f) {
-////                        matrix.set(savedMatrix);
-////                        oldDist = spacing(event);
-////                        float scale = newDist / oldDist;
-////
-////                        matrix.postScale(scale, scale, mid.x, mid.y);
-////                    }
-////                }
-//                break;
-//
-//        }
-//
-//        // Perform the transformation
-//        ivOnGrid.setImageMatrix(matrix);
-//
-//        return true; // indicate event was handled
-//    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         ImageView view = (ImageView) v;
@@ -200,21 +151,26 @@ public class GridActivity2 extends Activity implements View.OnTouchListener {
                 Log.d("offset", offset.toString());
                 mode=DRAG;
                 break;
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                oldDist = spacing(event);
-//                Log.d(TAG, "oldDist=" + oldDist);
-//                if (oldDist > 10f) {
-//                    savedMatrix.set(matrix);
-//                    midPoint(mid, event);
-//                    mode = ZOOM;
-//                    Log.d(TAG, "mode=ZOOM" );
-//                }
-//                break;
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_POINTER_UP:
-//                mode = NONE;
-//                Log.d(TAG, "mode=NONE" );
-//                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                initialTouchDistance = getTouchSpacing(event);
+                initialScale=ivOnGrid.getScaleX();
+                initialRotation=ivOnGrid.getRotation();
+                oldAngle =getTouchAngle(event);
+                Log.d(TAG, "oldDist=" + initialTouchDistance);
+                //if the pinch gesture is significant
+                if (initialTouchDistance > 10f) {
+                    pivot.set((ivOnGrid.getWidth()/2), (ivOnGrid.getHeight()/2));
+                    ivOnGrid.setPivotX(pivot.x);
+                    ivOnGrid.setPivotY(pivot.y);
+                    mode = ZOOM;
+                    Log.d(TAG, "mode=ZOOM" );
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = NONE;
+                Log.d(TAG, "mode=NONE" );
+                break;
 //
             case MotionEvent.ACTION_MOVE:
                 if (mode == DRAG) {
@@ -222,28 +178,44 @@ public class GridActivity2 extends Activity implements View.OnTouchListener {
                     ivOnGrid.setTranslationX(event.getX()-offset.x);
                     ivOnGrid.setTranslationY(event.getY()-offset.y);
                 }
-//                else if (mode == ZOOM) {
-//                    newDist = spacing(event);
-//                    Log.d(TAG, "newDist=" + newDist);
-//                    if (newDist > 10f) {
-//                        matrix.set(savedMatrix);
-//                        oldDist = spacing(event);
-//                        float scale = newDist / oldDist;
-//
-//                        matrix.postScale(scale, scale, mid.x, mid.y);
-//                    }
-//                }
+                else if (mode == ZOOM) {
+                    newDist = getTouchSpacing(event);
+                    Log.d(TAG, "newDist=" + newDist);
+                    if (newDist > 10f) {
+
+                        // zoom
+                        float scale = Math.max((newDist / initialTouchDistance)+(initialScale-1),0);
+                        ivOnGrid.setScaleX(scale);
+                        ivOnGrid.setScaleY(scale);
+
+
+                        // rotation
+                        float newAngle=getTouchAngle(event);
+                        float deltaRotation= newAngle- oldAngle;
+                        ivOnGrid.setRotation(ivOnGrid.getRotation()-deltaRotation);
+                        oldAngle=newAngle;
+
+
+
+                    }
+                }
                 break;
 
         }
 
         // Perform the transformation
-        ivOnGrid.setImageMatrix(matrix);
+//        ivOnGrid.setImageMatrix(matrix);
 
         return true; // indicate event was handled
     }
 
-    private float spacing(MotionEvent event) {
+    private float getTouchAngle(MotionEvent event) {
+        float angle= (float) Math.toDegrees(Math.atan2(event.getX(0) - event.getX(1),event.getY(0) - event.getY(1)));
+        return angle;
+    }
+
+    private float getTouchSpacing(MotionEvent event) {
+
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return FloatMath.sqrt(x * x + y * y);
