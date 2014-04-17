@@ -260,7 +260,7 @@ public class ZoomableImageView extends View {
         }
     }
 
-
+    //test
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(gestureDetector.onTouchEvent(event)) {
