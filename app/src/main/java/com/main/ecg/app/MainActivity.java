@@ -36,46 +36,31 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
 //        if (savedInstanceState == null) {
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.container, new PlaceholderFragment())
 //                    .commit();
 //        }
 
+        //add a listener to the buttons on the screen
         addListenerOnButton();
-
-        //hello!
-
-
-
     }
 
+    //the listener that gets the button that was pressed
     public void addListenerOnButton() {
 
         cameraButton = (ImageButton) findViewById(R.id.camera_button);
         galleryButton= (ImageButton) findViewById(R.id.gallery_button);
 
-//
-//        if(v.getId() == R.id.camera_button) {
-//            // do this
-//        }else if(v.getId() == R.id.button2) {
-//            // do that
-//        }
         cameraButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(MainActivity.this,
-                        "cameraButton is clicked!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this,
+//                        "cameraButton is clicked!", Toast.LENGTH_SHORT).show();
 
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivity(cameraIntent);
-
                 Bitmap ECG_STRIP_PIC;
-
                 startActivityForResult(cameraIntent, TAKE_PIC_REQUEST);
 
             }
@@ -95,7 +80,7 @@ public class MainActivity extends Activity {
         });
     }
 
-
+    // manage what will happen when a specific button is clicked
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -125,15 +110,6 @@ public class MainActivity extends Activity {
         } else if ((requestCode == RESULT_LOAD_IMAGE)){
 
             if (resultCode == RESULT_OK) {
-//                ECG_STRIP_PIC_URI=data.getData();
-//
-//                //get the pic and show it on a imageView
-//                Bundle extras = data.getExtras();
-//                Bitmap mImageBitmap = (Bitmap) extras.get("data");
-////                cameraButton = (ImageButton) findViewById(R.id.camera_button);
-//                iv= (ImageView) findViewById(R.id.imageView1);
-//                iv.setImageBitmap(mImageBitmap);
-
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
                 Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
@@ -141,27 +117,16 @@ public class MainActivity extends Activity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String picturePath = cursor.getString(columnIndex);
                 cursor.close();
-//                ImageView imageView = (ImageView) findViewById(R.id.imgView);
-//                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-                //get the pic and show it on a imageView
-//                Bundle extras = data.getExtras();
-//                Bitmap mImageBitmap = (Bitmap) extras.get("data");
-//                cameraButton = (ImageButton) findViewById(R.id.camera_button);
-    //                iv= (ImageView) findViewById(R.id.imageView1);
-    //                iv.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
                 // delegate the pic to the next window: "GridActivity2"
                 Intent goToGridView = new Intent(MainActivity.this, GridActivity2.class);
                 goToGridView.putExtra("picFromGallery", picturePath);
                 MainActivity.this.startActivity(goToGridView);
 
-
             }
 
         }
     }
-
 
 
     @Override

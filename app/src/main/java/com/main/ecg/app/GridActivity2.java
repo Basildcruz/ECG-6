@@ -75,29 +75,18 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
             ivOnGrid.setImageBitmap(BitmapFactory.decodeFile(delegatedImagePath));
         }
 
-        //add zoom capabilities
-        grid= (ImageView) findViewById(R.id.gridImageView);
-        grid.setOnTouchListener(this);
-
-//        setContentView(R.layout.activity_grid_activity2);
-//        Context c= ivOnGrid.getContext();
-//
-//        new ZoomableImageView(c);
-
-
-        //draw a grid of squares on the activity
-
-
-//        drawView = new DrawView(this);
-//        drawView.setBackgroundColor(Color.WHITE);
-//        setContentView(drawView);
-
+        //draw a grid
         MainLayout = (FrameLayout) findViewById(R.id.container);
         CustomView customview = new CustomView(this);
         MainLayout.addView(customview);
 
+        //add move, zoom, and tilt capabilities to pic
+        grid= (ImageView) findViewById(R.id.gridImageView);
+        grid.setOnTouchListener(this);
+
     }
 
+    // manage the grid draw on screen
     private class CustomView extends View {
         public CustomView(Context context) {
             super(context);
@@ -131,7 +120,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         }
     }
 
-//
+    // manage the move, zoom and tilt capabilities
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         ImageView view = (ImageView) v;
@@ -203,11 +192,9 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 
         }
 
-        // Perform the transformation
-//        ivOnGrid.setImageMatrix(matrix);
-
         return true; // indicate event was handled
     }
+
 
     private float getTouchAngle(MotionEvent event) {
         float angle= (float) Math.toDegrees(Math.atan2(event.getX(0) - event.getX(1),event.getY(0) - event.getY(1)));
@@ -215,7 +202,6 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     }
 
     private float getTouchSpacing(MotionEvent event) {
-
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return FloatMath.sqrt(x * x + y * y);
