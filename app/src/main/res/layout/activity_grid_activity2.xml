@@ -11,6 +11,13 @@
     <ImageView android:id="@+id/gridImageView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+
+        >
+    </ImageView>
+
+    <ImageView android:id="@+id/picImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:scaleType="matrix"
         >
     </ImageView>
