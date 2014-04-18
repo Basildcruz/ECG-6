@@ -20,20 +20,41 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="fitCenter"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
     </ImageView>
+
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:id="@+id/beginRullerImageView"
-        android:layout_gravity="left|center_vertical" />
+        android:layout_gravity="left" />
+
+
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:id="@+id/endRullerImageView"
         android:layout_gravity="right|center_vertical" />
+
+    <TextView
+        android:layout_width="143dp"
+        android:layout_height="40dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Interval:"
+        android:id="@+id/intervalTextView"
+        android:layout_gravity="right|bottom" />
+
+    <EditText
+        android:layout_width="69dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/intervalEditText"
+        android:layout_gravity="right|bottom" />
 
 
 </FrameLayout>

@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -33,6 +34,8 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     public ImageView beginRuller;
     public ImageView endRuller;
     public ImageView grid;
+    public EditText intervalED;
+    public float intervalBetweenRullers=0;
     public PointF offset=new PointF(); // the offset is the difference between the point of the press to the 0,0 point of the picture
     public Float initialTouchDistance;
     public Float initialScale;
@@ -77,6 +80,10 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         ab.setTitle("Measure RR distance");
         ab.setSubtitle("peak to peak");
 
+        intervalED=(EditText) findViewById(R.id.intervalEditText);
+        intervalED.setText(Float.toString(intervalBetweenRullers));
+
+
         // get the image from the camera or the gallery and display it on this activity
         Intent picIntent = getIntent();
         Bundle extras = picIntent.getExtras();
@@ -107,7 +114,6 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         //add move, zoom, and tilt capabilities to pic
         grid= (ImageView) findViewById(R.id.gridImageView);
         grid.setOnTouchListener(new View.OnTouchListener(){
-
             // manage the move, zoom and tilt capabilities
 
             public boolean onTouch(View v, MotionEvent event) {
@@ -208,8 +214,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         //begin measure ruller
 
         beginRuller =(ImageView) findViewById(R.id.beginRullerImageView);
-        beginRuller.setImageDrawable(getResources().getDrawable(R.drawable.right_ruller));
-
+        beginRuller.setImageDrawable(getResources().getDrawable(R.drawable.right_ruller_4pt));
         beginRuller.setOnTouchListener(new View.OnTouchListener(){
             public boolean onTouch(View v, MotionEvent event) {
                 if(isPicLocked==true){
@@ -225,6 +230,8 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 
                                 //move just on the horizontal plane
                                 beginRuller.setTranslationX(event.getX()-offset.x);
+                                intervalBetweenRullers=endRuller.getX()-beginRuller.getX();
+                                intervalED.setText(Float.toString(intervalBetweenRullers));
 
                             }
 //                        case MotionEvent.ACTION_UP:
@@ -242,7 +249,36 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 
         //end measure ruller
         endRuller =(ImageView) findViewById(R.id.endRullerImageView);
-        endRuller.setImageDrawable(getResources().getDrawable(R.drawable.left_ruller));
+        endRuller.setImageDrawable(getResources().getDrawable(R.drawable.left_ruller_4pt));
+        endRuller.setOnTouchListener(new View.OnTouchListener(){
+            public boolean onTouch(View v, MotionEvent event) {
+                if(isPicLocked==true){
+
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_DOWN:
+                            offset.set(event.getX()-endRuller.getTranslationX(), event.getY());
+                            Log.d("offset", offset.toString());
+                            mode=DRAG;
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (mode == DRAG) {
+
+                                //move just on the horizontal plane
+                                endRuller.setTranslationX(event.getX()-offset.x);
+                                intervalBetweenRullers=endRuller.getX()-beginRuller.getX();
+                                intervalED.setText(Float.toString(intervalBetweenRullers));
+                            }
+//                        case MotionEvent.ACTION_UP:
+//                            mode = NONE;
+//                            Log.d(TAG, "mode=NONE" );
+//                            break;
+                    }
+
+
+                }
+                return true;
+            }
+        });
     }
 
     @Override
