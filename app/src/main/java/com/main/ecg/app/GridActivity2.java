@@ -82,6 +82,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 
         intervalED=(EditText) findViewById(R.id.intervalEditText);
         intervalED.setText(Float.toString(intervalBetweenRullers));
+        intervalED.bringToFront();
 
 
         // get the image from the camera or the gallery and display it on this activity
@@ -218,6 +219,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         beginRuller.setOnTouchListener(new View.OnTouchListener(){
             public boolean onTouch(View v, MotionEvent event) {
                 if(isPicLocked==true){
+                    beginRuller.bringToFront();
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
@@ -253,6 +255,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         endRuller.setOnTouchListener(new View.OnTouchListener(){
             public boolean onTouch(View v, MotionEvent event) {
                 if(isPicLocked==true){
+                    endRuller.bringToFront();
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
@@ -401,10 +404,10 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 //            case R.id.action_settings:
 //                openSettings();
 //                return true;
-            case R.id.action_lock_pic_movment:
+            case R.id.lock_pic:
                 isPicLocked=true;
                 return true;
-            case R.id.action_unlock_pic_movment:
+            case R.id.unlock_pic:
                 isPicLocked=false;
                 return true;
             default:
