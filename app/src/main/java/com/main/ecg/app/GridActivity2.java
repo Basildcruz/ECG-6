@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -46,11 +47,18 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     Matrix matrix = new Matrix();
     Matrix savedMatrix = new Matrix();
 
+    //touch states
     // We can be in one of these 3 states
     static final int NONE = 0;
     static final int DRAG = 1;
     static final int ZOOM = 2;
     int mode = NONE;
+
+    //touch listener state
+//    static final int NONE = 0;
+//    static final int DRAG = 1;
+//    static final int ZOOM = 2;
+//    int mode = NONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,21 +98,158 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         CustomView customview = new CustomView(this);
         MainLayout.addView(customview);
 
+        addTouchListeners();
+
+    }
+
+    public void addTouchListeners() {
+
         //add move, zoom, and tilt capabilities to pic
         grid= (ImageView) findViewById(R.id.gridImageView);
-        grid.setOnTouchListener(this);
+        grid.setOnTouchListener(new View.OnTouchListener(){
+
+            // manage the move, zoom and tilt capabilities
+
+            public boolean onTouch(View v, MotionEvent event) {
+                if(isPicLocked==false){
+                    ImageView view = (ImageView) v;
+
+                    // Dump touch event to log
+//        dumpEvent(event);
+
+                    // Handle touch events here...
+
+                    PointF start= new PointF();
+                    float oldDist;
+                    float newDist;
+                    PointF mid = new PointF();
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_DOWN:
+                            offset.set(event.getX()-ivOnGrid.getTranslationX(), event.getY()-ivOnGrid.getTranslationY());
+                            Log.d("offset", offset.toString());
+                            mode=DRAG;
+                            break;
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                            initialTouchDistance = getTouchSpacing(event);
+                            initialScale=ivOnGrid.getScaleX();
+                            initialRotation=ivOnGrid.getRotation();
+                            oldAngle =getTouchAngle(event);
+                            Log.d(TAG, "oldDist=" + initialTouchDistance);
+                            //if the pinch gesture is significant
+                            if (initialTouchDistance > 10f) {
+                                pivot.set((ivOnGrid.getWidth()/2), (ivOnGrid.getHeight()/2));
+                                ivOnGrid.setPivotX(pivot.x);
+                                ivOnGrid.setPivotY(pivot.y);
+                                mode = ZOOM;
+                                Log.d(TAG, "mode=ZOOM" );
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_POINTER_UP:
+                            mode = NONE;
+                            Log.d(TAG, "mode=NONE" );
+                            break;
+//
+                        case MotionEvent.ACTION_MOVE:
+                            if (mode == DRAG) {
+
+                                ivOnGrid.setTranslationX(event.getX()-offset.x);
+                                ivOnGrid.setTranslationY(event.getY()-offset.y);
+                            }
+                            else if (mode == ZOOM) {
+                                newDist = getTouchSpacing(event);
+                                Log.d(TAG, "newDist=" + newDist);
+                                if (newDist > 10f) {
+
+                                    // zoom
+                                    float scale = Math.max((newDist / initialTouchDistance)+(initialScale-1),0);
+                                    ivOnGrid.setScaleX(scale);
+                                    ivOnGrid.setScaleY(scale);
+
+
+                                    // rotation
+                                    float newAngle=getTouchAngle(event);
+                                    float deltaRotation= newAngle- oldAngle;
+                                    ivOnGrid.setRotation(ivOnGrid.getRotation()-deltaRotation);
+                                    oldAngle=newAngle;
+
+
+
+                                }
+                            }
+                            break;
+
+                    }
+                }
+                return true; // indicate event was handled
+            }
+
+
+            private float getTouchAngle(MotionEvent event) {
+                float angle= (float) Math.toDegrees(Math.atan2(event.getX(0) - event.getX(1),event.getY(0) - event.getY(1)));
+                return angle;
+            }
+
+            private float getTouchSpacing(MotionEvent event) {
+                float x = event.getX(0) - event.getX(1);
+                float y = event.getY(0) - event.getY(1);
+                return FloatMath.sqrt(x * x + y * y);
+            }
+
+            private void midPoint(PointF point, MotionEvent event) {
+                float x = event.getX(0) + event.getX(1);
+                float y = event.getY(0) + event.getY(1);
+                point.set(x / 2, y / 2);
+            }
+
+        });
 
         //add rullers
         //begin measure ruller
+
         beginRuller =(ImageView) findViewById(R.id.beginRullerImageView);
         beginRuller.setImageDrawable(getResources().getDrawable(R.drawable.right_ruller));
+
+        beginRuller.setOnTouchListener(new View.OnTouchListener(){
+            public boolean onTouch(View v, MotionEvent event) {
+                if(isPicLocked==true){
+
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_DOWN:
+                            offset.set(event.getX()-beginRuller.getTranslationX(), event.getY());
+                            Log.d("offset", offset.toString());
+                            mode=DRAG;
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (mode == DRAG) {
+
+                                //move just on the horizontal plane
+                                beginRuller.setTranslationX(event.getX()-offset.x);
+
+                            }
+//                        case MotionEvent.ACTION_UP:
+//                            mode = NONE;
+//                            Log.d(TAG, "mode=NONE" );
+//                            break;
+                    }
+
+
+                }
+              return true;
+            }
+        });
+
 
         //end measure ruller
         endRuller =(ImageView) findViewById(R.id.endRullerImageView);
         endRuller.setImageDrawable(getResources().getDrawable(R.drawable.left_ruller));
-
-
     }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return false;
+    }
+
 
     // manage the grid draw on screen
     private class CustomView extends View {
@@ -121,8 +266,8 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
             float width = getWindowManager().getDefaultDisplay().getWidth();
             float height = getWindowManager().getDefaultDisplay().getHeight();
 
-            float[] pointsForGrid={0, (float) (height*0.2), 0, (float) (height*0.4), 0, (float) (height*0.6), 0, (float) (height*0.8), 0 ,(float) (height*1), width, (float) (height*0.2), width, (float) (height*0.4), width,(float) (height*0.6), width, (float) (height*0.8), width,(float) (height*1)};
-            canvas.drawLines(pointsForGrid, 0, 0, paint);
+//            float[] pointsForGrid={0, (float) (height*0.2), 0, (float) (height*0.4), 0, (float) (height*0.6), 0, (float) (height*0.8), 0 ,(float) (height*1), width, (float) (height*0.2), width, (float) (height*0.4), width,(float) (height*0.6), width, (float) (height*0.8), width,(float) (height*1)};
+//            canvas.drawLines(pointsForGrid, 0, 0, paint);
 
             //horizontal lines
             canvas.drawLine(0, (float) (height*0.2), width, (float) (height*0.2), paint);
@@ -138,100 +283,6 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
                 endOfWidth=endOfWidth+edge;
             }
         }
-    }
-
-    // manage the move, zoom and tilt capabilities
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if(isPicLocked==false){
-        ImageView view = (ImageView) v;
-
-        // Dump touch event to log
-//        dumpEvent(event);
-
-        // Handle touch events here...
-
-        PointF start= new PointF();
-        float oldDist;
-        float newDist;
-        PointF mid = new PointF();
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                offset.set(event.getX()-ivOnGrid.getTranslationX(), event.getY()-ivOnGrid.getTranslationY());
-                Log.d("offset", offset.toString());
-                mode=DRAG;
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                initialTouchDistance = getTouchSpacing(event);
-                initialScale=ivOnGrid.getScaleX();
-                initialRotation=ivOnGrid.getRotation();
-                oldAngle =getTouchAngle(event);
-                Log.d(TAG, "oldDist=" + initialTouchDistance);
-                //if the pinch gesture is significant
-                if (initialTouchDistance > 10f) {
-                    pivot.set((ivOnGrid.getWidth()/2), (ivOnGrid.getHeight()/2));
-                    ivOnGrid.setPivotX(pivot.x);
-                    ivOnGrid.setPivotY(pivot.y);
-                    mode = ZOOM;
-                    Log.d(TAG, "mode=ZOOM" );
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-                mode = NONE;
-                Log.d(TAG, "mode=NONE" );
-                break;
-//
-            case MotionEvent.ACTION_MOVE:
-                if (mode == DRAG) {
-
-                    ivOnGrid.setTranslationX(event.getX()-offset.x);
-                    ivOnGrid.setTranslationY(event.getY()-offset.y);
-                }
-                else if (mode == ZOOM) {
-                    newDist = getTouchSpacing(event);
-                    Log.d(TAG, "newDist=" + newDist);
-                    if (newDist > 10f) {
-
-                        // zoom
-                        float scale = Math.max((newDist / initialTouchDistance)+(initialScale-1),0);
-                        ivOnGrid.setScaleX(scale);
-                        ivOnGrid.setScaleY(scale);
-
-
-                        // rotation
-                        float newAngle=getTouchAngle(event);
-                        float deltaRotation= newAngle- oldAngle;
-                        ivOnGrid.setRotation(ivOnGrid.getRotation()-deltaRotation);
-                        oldAngle=newAngle;
-
-
-
-                    }
-                }
-                break;
-
-        }
-        }
-        return true; // indicate event was handled
-    }
-
-
-    private float getTouchAngle(MotionEvent event) {
-        float angle= (float) Math.toDegrees(Math.atan2(event.getX(0) - event.getX(1),event.getY(0) - event.getY(1)));
-        return angle;
-    }
-
-    private float getTouchSpacing(MotionEvent event) {
-        float x = event.getX(0) - event.getX(1);
-        float y = event.getY(0) - event.getY(1);
-        return FloatMath.sqrt(x * x + y * y);
-    }
-
-    private void midPoint(PointF point, MotionEvent event) {
-        float x = event.getX(0) + event.getX(1);
-        float y = event.getY(0) + event.getY(1);
-        point.set(x / 2, y / 2);
     }
 
     /** Show an event in the LogCat view, for debugging */
