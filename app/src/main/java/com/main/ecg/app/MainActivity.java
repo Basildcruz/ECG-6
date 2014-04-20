@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
     }
 
     //the listener that gets the button that was pressed
-    public void addListenerOnButton() {
+    private void addListenerOnButton() {
 
         cameraButton = (ImageButton) findViewById(R.id.camera_button);
         galleryButton= (ImageButton) findViewById(R.id.gallery_button);

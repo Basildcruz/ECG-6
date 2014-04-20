@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class GridActivity2 extends ActionBarActivity implements View.OnTouchListener {
@@ -34,6 +36,8 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     public ImageView beginRuller;
     public ImageView endRuller;
     public ImageView grid;
+    public ImageView infoIV;
+    public ImageButton informationButton;
     public EditText intervalED;
     public float intervalBetweenRullers=0;
     public PointF offset=new PointF(); // the offset is the difference between the point of the press to the 0,0 point of the picture
@@ -74,11 +78,13 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 //                    .commit();
 //        }
 
+
+
         //action bar settings
         ActionBar ab = getActionBar();
         ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
-        ab.setTitle("Measure RR distance");
-        ab.setSubtitle("peak to peak");
+        ab.setTitle("Measure PR interval");
+        ab.setSubtitle("step 1/12");
 
         intervalED=(EditText) findViewById(R.id.intervalEditText);
         intervalED.setText(Float.toString(intervalBetweenRullers));
@@ -106,8 +112,35 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         CustomView customview = new CustomView(this);
         MainLayout.addView(customview);
 
+        //add a listener to the touch events
         addTouchListeners();
 
+        //add listeners on buttons
+        addListenerOnButton();
+
+    }
+
+    private void addListenerOnButton() {
+        infoIV = (ImageView)findViewById(R.id.infoImageView);
+        informationButton= (ImageButton) findViewById(R.id.infoImageButton);
+        informationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if(infoIV.getVisibility() == View.INVISIBLE)
+                {
+                    infoIV.setVisibility(View.VISIBLE);
+                }
+                else if (infoIV.getVisibility() == View.VISIBLE)
+                {
+                    infoIV.setVisibility(View.INVISIBLE);
+                }
+
+
+            }
+
+        });
     }
 
     public void addTouchListeners() {
@@ -394,7 +427,8 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.grid_activity2, menu);
-        return super.onCreateOptionsMenu(menu);
+//        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

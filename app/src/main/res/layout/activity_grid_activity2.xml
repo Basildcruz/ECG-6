@@ -46,6 +46,7 @@
         android:layout_height="40dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Interval:"
+        android:textColor="#336699"
         android:id="@+id/intervalTextView"
         android:layout_gravity="right|bottom" />
 
@@ -55,7 +56,23 @@
         android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/intervalEditText"
+        android:textColor="#336699"
         android:layout_gravity="right|bottom" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/infoImageButton"
+        android:layout_gravity="left|bottom"
+        android:src="@drawable/info_32px" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/infoImageView"
+        android:src="@drawable/pr_interval_info_bubble"
+        android:visibility="invisible"
+        android:layout_gravity="left|bottom" />
 
 
 </FrameLayout>
