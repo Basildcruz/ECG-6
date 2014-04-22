@@ -114,7 +114,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         }
 
         //draw a grid
-        MainLayout = (FrameLayout) findViewById(R.id.container);
+        MainLayout = (FrameLayout) findViewById(R.id.frame_layout_1);
         CustomView customview = new CustomView(this);
         MainLayout.addView(customview);
 
