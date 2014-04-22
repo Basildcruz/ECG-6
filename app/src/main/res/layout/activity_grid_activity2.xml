@@ -55,7 +55,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/infoImageView"
-                android:src="@drawable/pr_interval_info_bubble"
                 android:visibility="invisible"
                 android:layout_gravity="left|bottom" />
 

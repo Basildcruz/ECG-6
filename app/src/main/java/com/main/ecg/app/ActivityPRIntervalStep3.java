@@ -133,11 +133,12 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
 
     private void addListenerOnButton() {
         infoIV = (ImageView)findViewById(R.id.infoImageView);
+        infoIV.setImageDrawable(getResources().getDrawable(R.drawable.pr_interval_info_bubble));
+        infoIV.setVisibility(View.INVISIBLE);
         informationButton= (ImageButton) findViewById(R.id.infoImageButton);
         informationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 if(infoIV.getVisibility() == View.INVISIBLE)
                 {
