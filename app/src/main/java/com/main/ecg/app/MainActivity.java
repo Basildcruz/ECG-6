@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -96,7 +95,7 @@ public class MainActivity extends Activity {
                 Bitmap mImageBitmap = (Bitmap) extras.get("data");
 
                 // delegate the pic to the next window: "GridActivity2"
-                Intent goToGridView = new Intent(MainActivity.this, GridActivity2.class);
+                Intent goToGridView = new Intent(MainActivity.this, ActivityPRIntervalStep3.class);
                 goToGridView.putExtra("picFromCamera", (Bitmap) extras.get("data"));
                 MainActivity.this.startActivity(goToGridView);
 
@@ -116,7 +115,7 @@ public class MainActivity extends Activity {
                 cursor.close();
 
                 // delegate the pic to the next window: "GridActivity2"
-                Intent goToGridView = new Intent(MainActivity.this, GridActivity2.class);
+                Intent goToGridView = new Intent(MainActivity.this, ActivityPRIntervalStep3.class);
                 goToGridView.putExtra("picFromGallery", picturePath);
                 MainActivity.this.startActivity(goToGridView);
 

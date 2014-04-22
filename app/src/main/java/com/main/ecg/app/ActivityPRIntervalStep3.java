@@ -10,50 +10,53 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 
-public class GridActivity2 extends ActionBarActivity implements View.OnTouchListener {
+public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.OnTouchListener {
 
     public ImageView ivOnGrid;
     public ImageView beginRuller;
     public ImageView endRuller;
     public ImageView grid;
     public ImageView infoIV;
+
     public ImageButton informationButton;
-    public ImageButton lockPicButton;
+    public ImageButton moveOrMeasureButton;
+    public ImageButton checkButton;
+
     public EditText intervalED;
-    public float intervalBetweenRullers=0;
+
+    public PointF pivot= new PointF();
     public PointF offset=new PointF(); // the offset is the difference between the point of the press to the 0,0 point of the picture
+
     public Float initialTouchDistance;
     public Float initialScale;
     public Float initialRotation;
     public Float oldAngle;
-    public PointF pivot= new PointF();
+    public float intervalBetweenRullers=0;
+
     public boolean isPicLocked=false;
+    public boolean measureBtnWasClickd=false;
     DrawView drawView;
     FrameLayout MainLayout;
     private static final String TAG = "Touch" ;
+
+
     // These matrices will be used to move and zoom image
     Matrix matrix = new Matrix();
     Matrix savedMatrix = new Matrix();
@@ -65,11 +68,6 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     static final int ZOOM = 2;
     int mode = NONE;
 
-    //touch listener state
-//    static final int NONE = 0;
-//    static final int DRAG = 1;
-//    static final int ZOOM = 2;
-//    int mode = NONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +86,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         ActionBar ab = getActionBar();
         ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
         ab.setTitle("Measure PR interval");
-        ab.setSubtitle("step 1/12");
+        ab.setSubtitle("step 3/12");
 
 
         //interval edit text settings
@@ -124,7 +122,14 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         //add listeners on buttons
         addListenerOnButton();
 
+        //add animation on measure button
+        moveOrMeasureButton= (ImageButton) findViewById(R.id.moveOrMeasureImageButton);
+        Animation myFadeInAnimation = AnimationUtils.loadAnimation(ActivityPRIntervalStep3.this,R.anim.fade);
+        moveOrMeasureButton.startAnimation(myFadeInAnimation);
+
     }
+
+
 
     private void addListenerOnButton() {
         infoIV = (ImageView)findViewById(R.id.infoImageView);
@@ -137,6 +142,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
                 if(infoIV.getVisibility() == View.INVISIBLE)
                 {
                     infoIV.setVisibility(View.VISIBLE);
+                    infoIV.bringToFront();
                 }
                 else if (infoIV.getVisibility() == View.VISIBLE)
                 {
@@ -150,38 +156,55 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
 
 
 
-        lockPicButton= (ImageButton) findViewById(R.id.lockImageButton);
-        lockPicButton.setOnClickListener(new View.OnClickListener() {
+        moveOrMeasureButton = (ImageButton) findViewById(R.id.moveOrMeasureImageButton);
+        moveOrMeasureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(isPicLocked==false){
-                    isPicLocked=true;
-                    lockPicButton.setImageDrawable(getResources().getDrawable(R.drawable.unlock_32px));
-                }else if(isPicLocked==true){
-                    isPicLocked=false;
-                    lockPicButton.setImageDrawable(getResources().getDrawable(R.drawable.lock_32px));
+                //stoping the fade animation on the button, since the user used it
+                moveOrMeasureButton.clearAnimation();
+
+
+
+                if (isPicLocked == false) {
+                    isPicLocked = true;
+                    moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.movepic_32px));
+                    beginRuller.setVisibility(View.VISIBLE);
+                    endRuller.setVisibility(View.VISIBLE);
+                } else if (isPicLocked == true) {
+                    isPicLocked = false;
+                    moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.measure_32px));
+                    beginRuller.setVisibility(View.INVISIBLE);
+                    endRuller.setVisibility((View.INVISIBLE));
 
                 }
+            }
 
-//                switch (view.getId()) {
-//                    case R.id.lockImageButton:
-//
-//                        if (lockPicButton.isSelected()){
-//                            isPicLocked=true;
-//                            lockPicButton.setImageDrawable(getResources().getDrawable(R.drawable.unlock_32px));
-//                        }
-//
-//
-//                        break;
-//                    default:
-//                        break;
+        });
+
+        checkButton= (ImageButton) findViewById(R.id.checkImageButton);
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //stop the animation on the button
+                checkButton.clearAnimation();
+
+//                // move to the next step: "ActivityPWaveSizeStage4"
+                Intent goToNextStep = new Intent(ActivityPRIntervalStep3.this, ActivityPWaveSizeStep4.class);
+//                goToGridView.putExtra("picFromCamera", (Bitmap) extras.get("data"));
+
+                ActivityPRIntervalStep3.this.startActivity(goToNextStep);
+
+
             }
 
         });
 
 
     }
+
+
 
     public void addTouchListeners() {
 
@@ -300,6 +323,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
                             Log.d("offset", offset.toString());
                             mode=DRAG;
                             break;
+
                         case MotionEvent.ACTION_MOVE:
                             if (mode == DRAG) {
 
@@ -329,6 +353,11 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
             public boolean onTouch(View v, MotionEvent event) {
                 if(isPicLocked==true){
                     endRuller.bringToFront();
+
+                    //starting the fade animation on the check button, since this is the next step
+                    checkButton= (ImageButton) findViewById(R.id.checkImageButton);
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(ActivityPRIntervalStep3.this,R.anim.fade);
+                    checkButton.startAnimation(myFadeInAnimation);
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:

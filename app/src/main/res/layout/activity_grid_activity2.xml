@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="com.main.ecg.app.GridActivity2"
+    tools:context="com.main.ecg.app.ActivityPRInervalStep3"
     tools:ignore="MergeRootFrame"
     android:orientation="vertical"
     android:background="#ffffff">
@@ -39,7 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/beginRullerImageView"
-                android:layout_gravity="left" />
+                android:layout_gravity="left"
+                android:visibility="invisible"/>
 
 
 
@@ -47,7 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/endRullerImageView"
-                android:layout_gravity="right|center_vertical" />
+                android:layout_gravity="right"
+                android:visibility="invisible"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -70,8 +72,8 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/lockImageButton"
-            android:src="@drawable/lock_32px"/>
+            android:id="@+id/moveOrMeasureImageButton"
+            android:src="@drawable/measure_32px"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -99,6 +101,12 @@
             android:id="@+id/intervalEditText"
             android:layout_gravity="center"
             android:clickable="false"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/checkImageButton"
+            android:src="@drawable/check_32px"/>
 
 
     </LinearLayout>

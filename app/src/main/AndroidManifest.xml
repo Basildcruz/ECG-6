@@ -7,14 +7,12 @@
         android:debuggable="true"
         android:icon="@drawable/ecgrid_logo"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-        >
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <uses-feature
             android:name="android.hardware.camera"
             android:required="true" />
 
         <uses-sdk android:minSdkVersion="11" />
-
 
         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -28,12 +26,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.main.ecg.app.GridActivity2"
+            android:name=".ActivityPRIntervalStep3"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_grid_activity2"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-
+            android:theme="@style/Theme.AppCompat" >
+        </activity>
+        <activity
+            android:name="com.main.ecg.app.ActivityPWaveSizeStep4"
+            android:label="@string/title_activity_activity_pwave_size_stage4"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
 
