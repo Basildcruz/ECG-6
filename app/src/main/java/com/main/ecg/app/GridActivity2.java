@@ -29,6 +29,9 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 public class GridActivity2 extends ActionBarActivity implements View.OnTouchListener {
 
@@ -38,6 +41,7 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
     public ImageView grid;
     public ImageView infoIV;
     public ImageButton informationButton;
+    public ImageButton lockPicButton;
     public EditText intervalED;
     public float intervalBetweenRullers=0;
     public PointF offset=new PointF(); // the offset is the difference between the point of the press to the 0,0 point of the picture
@@ -86,14 +90,16 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         ab.setTitle("Measure PR interval");
         ab.setSubtitle("step 1/12");
 
+
+        //interval edit text settings
         intervalED=(EditText) findViewById(R.id.intervalEditText);
         intervalED.setText(Float.toString(intervalBetweenRullers));
         intervalED.bringToFront();
 
-
         // get the image from the camera or the gallery and display it on this activity
         Intent picIntent = getIntent();
         Bundle extras = picIntent.getExtras();
+
         //get pic from camera
         if (extras.get("picFromCamera") instanceof Bitmap) {
             Bitmap delegatedImageBitmap = (Bitmap) extras.get("picFromCamera");
@@ -141,6 +147,40 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
             }
 
         });
+
+
+
+        lockPicButton= (ImageButton) findViewById(R.id.lockImageButton);
+        lockPicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(isPicLocked==false){
+                    isPicLocked=true;
+                    lockPicButton.setImageDrawable(getResources().getDrawable(R.drawable.unlock_32px));
+                }else if(isPicLocked==true){
+                    isPicLocked=false;
+                    lockPicButton.setImageDrawable(getResources().getDrawable(R.drawable.lock_32px));
+
+                }
+
+//                switch (view.getId()) {
+//                    case R.id.lockImageButton:
+//
+//                        if (lockPicButton.isSelected()){
+//                            isPicLocked=true;
+//                            lockPicButton.setImageDrawable(getResources().getDrawable(R.drawable.unlock_32px));
+//                        }
+//
+//
+//                        break;
+//                    default:
+//                        break;
+            }
+
+        });
+
+
     }
 
     public void addTouchListeners() {
@@ -421,33 +461,33 @@ public class GridActivity2 extends ActionBarActivity implements View.OnTouchList
         return inSampleSize;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.grid_activity2, menu);
-//        return super.onCreateOptionsMenu(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                openSettings();
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        // Inflate the menu items for use in the action bar
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.grid_activity2, menu);
+////        return super.onCreateOptionsMenu(menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle presses on the action bar items
+//        switch (item.getItemId()) {
+////            case R.id.action_settings:
+////                openSettings();
+////                return true;
+//            case R.id.lock_pic:
+//                isPicLocked=true;
 //                return true;
-            case R.id.lock_pic:
-                isPicLocked=true;
-                return true;
-            case R.id.unlock_pic:
-                isPicLocked=false;
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//            case R.id.unlock_pic:
+//                isPicLocked=false;
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     /**
      * A placeholder fragment containing a simple view.

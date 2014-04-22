@@ -1,3 +1,5 @@
+
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -5,17 +7,8 @@
     android:layout_height="match_parent"
     tools:context="com.main.ecg.app.GridActivity2"
     tools:ignore="MergeRootFrame"
-
+    android:orientation="vertical"
     android:background="#ffffff">
-
-
-
-    <ImageView android:id="@+id/gridImageView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-
-        >
-    </ImageView>
 
     <ImageView android:id="@+id/picImageView"
         android:layout_width="fill_parent"
@@ -23,9 +16,13 @@
         android:scaleType="fitCenter"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        >
-    </ImageView>
+        />
 
+    <ImageView android:id="@+id/gridImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -41,31 +38,6 @@
         android:id="@+id/endRullerImageView"
         android:layout_gravity="right|center_vertical" />
 
-    <TextView
-        android:layout_width="143dp"
-        android:layout_height="40dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Interval:"
-        android:textColor="#336699"
-        android:id="@+id/intervalTextView"
-        android:layout_gravity="right|bottom" />
-
-    <EditText
-        android:layout_width="69dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/intervalEditText"
-        android:textColor="#336699"
-        android:layout_gravity="right|bottom" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/infoImageButton"
-        android:layout_gravity="left|bottom"
-        android:src="@drawable/info_32px" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,5 +46,46 @@
         android:visibility="invisible"
         android:layout_gravity="left|bottom" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#AA000000"
+        android:layout_gravity="left|bottom">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lockImageButton"
+            android:src="@drawable/lock_32px"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/infoImageButton"
+            android:src="@drawable/info_32px"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Interval"
+        android:id="@+id/intervalTextView" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/intervalEditText"
+        android:layout_weight="1"
+        android:clickable="false"/>
+
+
+
 
 </FrameLayout>
+
