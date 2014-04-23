@@ -38,7 +38,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/beginRullerImageView"
+                android:id="@+id/leftRullerImageView"
                 android:layout_gravity="left"
                 android:visibility="invisible"/>
 
@@ -47,8 +47,22 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/endRullerImageView"
+                android:id="@+id/rightRullerImageView"
                 android:layout_gravity="right"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/upRullerImageView"
+                android:layout_gravity="top"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/downRullerImageView"
+                android:layout_gravity="bottom"
                 android:visibility="invisible"/>
 
             <ImageView

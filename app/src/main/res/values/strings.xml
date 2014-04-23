@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_grid_activity2">GridActivity2</string>
     <string name="title_activity_activity_pwave_size_stage4">ActivityPWaveSizeStage4</string>
+    <string name="title_activity_summary">SummaryActivity</string>
 
 </resources>

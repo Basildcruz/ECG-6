@@ -41,6 +41,8 @@ public class MainActivity extends Activity {
 //                    .commit();
 //        }
 
+        //start counter
+        HelperFunctions cntr=new HelperFunctions();
         //add a listener to the buttons on the screen
         addListenerOnButton();
     }
@@ -95,7 +97,7 @@ public class MainActivity extends Activity {
                 Bitmap mImageBitmap = (Bitmap) extras.get("data");
 
                 // delegate the pic to the next window: "GridActivity2"
-                Intent goToGridView = new Intent(MainActivity.this, ActivityPRIntervalStep3.class);
+                Intent goToGridView = new Intent(MainActivity.this, StepActivity.class);
                 goToGridView.putExtra("picFromCamera", (Bitmap) extras.get("data"));
                 MainActivity.this.startActivity(goToGridView);
 
@@ -115,7 +117,7 @@ public class MainActivity extends Activity {
                 cursor.close();
 
                 // delegate the pic to the next window: "GridActivity2"
-                Intent goToGridView = new Intent(MainActivity.this, ActivityPRIntervalStep3.class);
+                Intent goToGridView = new Intent(MainActivity.this, StepActivity.class);
                 goToGridView.putExtra("picFromGallery", picturePath);
                 MainActivity.this.startActivity(goToGridView);
 

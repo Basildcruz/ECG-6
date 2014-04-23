@@ -26,16 +26,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivityPRIntervalStep3"
+            android:name="com.main.ecg.app.StepActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_grid_activity2"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat" >
         </activity>
         <activity
-            android:name="com.main.ecg.app.ActivityPWaveSizeStep4"
-            android:label="@string/title_activity_activity_pwave_size_stage4"
-            android:screenOrientation="landscape"
+            android:name="com.main.ecg.app.SummaryActivity"
+            android:label="@string/title_activity_summary"
             android:theme="@style/Theme.AppCompat">
         </activity>
     </application>

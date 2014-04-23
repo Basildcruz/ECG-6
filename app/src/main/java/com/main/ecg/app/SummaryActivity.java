@@ -11,18 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
-public class ActivityPWaveSizeStep4 extends ActionBarActivity {
+public class SummaryActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_grid_activity2);
+        setContentView(R.layout.activity_summary);
 
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-//                    .commit();
-//        }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new PlaceholderFragment())
+                    .commit();
+        }
     }
 
 
@@ -30,7 +30,7 @@ public class ActivityPWaveSizeStep4 extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.grid_activity2, menu);
+        getMenuInflater().inflate(R.menu.summary, menu);
         return true;
     }
 
@@ -57,7 +57,7 @@ public class ActivityPWaveSizeStep4 extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_activity_pwave_size_stage4, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_summary, container, false);
             return rootView;
         }
     }

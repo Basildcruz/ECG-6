@@ -27,11 +27,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.OnTouchListener {
+public class StepActivity extends ActionBarActivity implements View.OnTouchListener {
+
+    private static final Integer NUM_OF_STEPS = 2;
 
     public ImageView ivOnGrid;
-    public ImageView beginRuller;
-    public ImageView endRuller;
+    public ImageView leftRuller;
+    public ImageView rightRuller;
+    public ImageView upRuller;
+    public ImageView downRuller;
     public ImageView grid;
     public ImageView infoIV;
 
@@ -55,6 +59,8 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
     DrawView drawView;
     FrameLayout MainLayout;
     private static final String TAG = "Touch" ;
+
+    public Integer activity_number;
 
 
     // These matrices will be used to move and zoom image
@@ -80,36 +86,38 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
 //                    .commit();
 //        }
 
+        //plus one the counter
+        HelperFunctions.plusOne();
+        activity_number= HelperFunctions.getActivityNumberCounter();
+
+        //example for how this is going to work
+//        switch (ActivityNumberCounter.getActivityNumberCounter()){
+//            case 1:
+//                iv.setImageDrawable(getResources().getDrawable(R.drawable.info_32px));
+//                break;
+
 
 
         //action bar settings
         ActionBar ab = getActionBar();
         ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
-        ab.setTitle("Measure PR interval");
-        ab.setSubtitle("step 3/12");
+        ab.setTitle(HelperFunctions.getStepName());
+        ab.setSubtitle("step "+ activity_number.toString()+"/12");
 
+        //things to do at the first step
+        if (activity_number==1){
+            thingsToDoAtFirstStep();
+        }
+
+        //things to do from step 2 till summary
+        if (activity_number>1){
+            thingsToDoAfterFirstStep();
+        }
 
         //interval edit text settings
         intervalED=(EditText) findViewById(R.id.intervalEditText);
         intervalED.setText(Float.toString(intervalBetweenRullers));
         intervalED.bringToFront();
-
-        // get the image from the camera or the gallery and display it on this activity
-        Intent picIntent = getIntent();
-        Bundle extras = picIntent.getExtras();
-
-        //get pic from camera
-        if (extras.get("picFromCamera") instanceof Bitmap) {
-            Bitmap delegatedImageBitmap = (Bitmap) extras.get("picFromCamera");
-            ivOnGrid=(ImageView) findViewById(R.id.picImageView);
-            ivOnGrid.setImageBitmap(delegatedImageBitmap);
-        //get pic from gallery
-        } else{
-            String delegatedImagePath = (String) extras.get("picFromGallery");
-            ivOnGrid= (ImageView) findViewById(R.id.picImageView);
-//            ivOnGrid.setImageBitmap(BitmapFactory.decodeFile(delegatedImagePath));
-            ivOnGrid.setImageBitmap(getScaledBitmap(delegatedImagePath, 800, 800));
-        }
 
         //draw a grid
         MainLayout = (FrameLayout) findViewById(R.id.frame_layout_1);
@@ -120,20 +128,74 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
         addTouchListeners();
 
         //add listeners on buttons
-        addListenerOnButton();
+        addListenerToMeasureButton();
+        addListenerToInfoButton();
+        addListenerToCheckButton();
 
         //add animation on measure button
         moveOrMeasureButton= (ImageButton) findViewById(R.id.moveOrMeasureImageButton);
-        Animation myFadeInAnimation = AnimationUtils.loadAnimation(ActivityPRIntervalStep3.this,R.anim.fade);
+        Animation myFadeInAnimation = AnimationUtils.loadAnimation(StepActivity.this,R.anim.fade);
         moveOrMeasureButton.startAnimation(myFadeInAnimation);
 
     }
 
 
+    private void thingsToDoAtFirstStep() {
+        // get the image from the camera or the gallery and display it on this activity
+        Intent picIntent = getIntent();
+        Bundle extras = picIntent.getExtras();
 
-    private void addListenerOnButton() {
+        //get pic from camera
+        if (extras.get("picFromCamera") instanceof Bitmap) {
+            Bitmap delegatedImageBitmap = (Bitmap) extras.get("picFromCamera");
+            HelperFunctions.setIsFromCamera(true);
+            HelperFunctions.setEcgBitmap(delegatedImageBitmap);
+            ivOnGrid=(ImageView) findViewById(R.id.picImageView);
+            ivOnGrid.setImageBitmap(delegatedImageBitmap);
+            //get pic from gallery
+        } else{
+            String delegatedImagePath = (String) extras.get("picFromGallery");
+            HelperFunctions.setIsFromCamera(false);
+            HelperFunctions.setEcgPath(delegatedImagePath);
+            ivOnGrid= (ImageView) findViewById(R.id.picImageView);
+//            ivOnGrid.setImageBitmap(BitmapFactory.decodeFile(delegatedImagePath));
+            ivOnGrid.setImageBitmap(getScaledBitmap(delegatedImagePath, 800, 800));
+        }
+    }
+
+    private void thingsToDoAfterFirstStep() {
+        ivOnGrid=(ImageView) findViewById(R.id.picImageView);
+        if (HelperFunctions.getIsFromCamera()==true){
+            ivOnGrid.setImageBitmap(HelperFunctions.getEcgBitmap());
+        }else {
+            ivOnGrid.setImageBitmap(getScaledBitmap(HelperFunctions.getEcgPath(), 800, 800));
+        }
+
+        ivOnGrid.setTranslationX(HelperFunctions.getImageView().getTranslationX());
+        ivOnGrid.setTranslationY(HelperFunctions.getImageView().getTranslationY());
+
+        ivOnGrid.setScaleX(HelperFunctions.getImageView().getScaleX());
+        ivOnGrid.setScaleY(HelperFunctions.getImageView().getScaleY());
+
+        ivOnGrid.setRotation(HelperFunctions.getImageView().getRotation());
+
+
+    }
+
+
+//    private void addListenerOnButton() {
+
+    public void addListenerToInfoButton(){
         infoIV = (ImageView)findViewById(R.id.infoImageView);
-        infoIV.setImageDrawable(getResources().getDrawable(R.drawable.pr_interval_info_bubble));
+        switch (activity_number){
+            case 2:
+                infoIV.setImageDrawable(getResources().getDrawable(R.drawable.ecgrid_logo));
+                break;
+            case 3:
+                infoIV.setImageDrawable(getResources().getDrawable(R.drawable.pr_interval_info_bubble));
+                break;
+
+        }
         infoIV.setVisibility(View.INVISIBLE);
         informationButton= (ImageButton) findViewById(R.id.infoImageButton);
         informationButton.setOnClickListener(new View.OnClickListener() {
@@ -155,34 +217,56 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
 
         });
 
+    }
 
 
+        public void addListenerToMeasureButton(){
         moveOrMeasureButton = (ImageButton) findViewById(R.id.moveOrMeasureImageButton);
-        moveOrMeasureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                //stoping the fade animation on the button, since the user used it
-                moveOrMeasureButton.clearAnimation();
+                    moveOrMeasureButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            //stoping the fade animation on the button, since the user used it
+                            moveOrMeasureButton.clearAnimation();
 
 
+                            if (isPicLocked == false) {
+                                isPicLocked = true;
+                                moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.movepic_32px));
+                                switch (activity_number){
+                                    case 3:
+                                        leftRuller.setVisibility(View.VISIBLE);
+                                        rightRuller.setVisibility(View.VISIBLE);
+                                        break;
+                                    case 5:
+                                        upRuller.setVisibility(View.VISIBLE);
+                                        downRuller.setVisibility(View.VISIBLE);
+                                        break;
+                                }
+                            } else if (isPicLocked == true) {
+                                isPicLocked = false;
+                                moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.measure_32px));
+                                switch (activity_number){
+                                    case 3:
+                                        leftRuller.setVisibility(View.VISIBLE);
+                                        rightRuller.setVisibility(View.VISIBLE);
+                                        break;
+                                    case 5:
+                                        upRuller.setVisibility(View.VISIBLE);
+                                        downRuller.setVisibility(View.VISIBLE);
+                                        break;
+                                }
 
-                if (isPicLocked == false) {
-                    isPicLocked = true;
-                    moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.movepic_32px));
-                    beginRuller.setVisibility(View.VISIBLE);
-                    endRuller.setVisibility(View.VISIBLE);
-                } else if (isPicLocked == true) {
-                    isPicLocked = false;
-                    moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.measure_32px));
-                    beginRuller.setVisibility(View.INVISIBLE);
-                    endRuller.setVisibility((View.INVISIBLE));
+                            }
+                        }
 
-                }
-            }
+                    });
 
-        });
+         }
 
+
+        public void addListenerToCheckButton(){
         checkButton= (ImageButton) findViewById(R.id.checkImageButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,19 +275,31 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
                 //stop the animation on the button
                 checkButton.clearAnimation();
 
-//                // move to the next step: "ActivityPWaveSizeStage4"
-                Intent goToNextStep = new Intent(ActivityPRIntervalStep3.this, ActivityPWaveSizeStep4.class);
-//                goToGridView.putExtra("picFromCamera", (Bitmap) extras.get("data"));
 
-                ActivityPRIntervalStep3.this.startActivity(goToNextStep);
+                if(activity_number<=NUM_OF_STEPS){
+
+                    //save the ecg picture state
+                    HelperFunctions.setImageView(ivOnGrid);
+                    // move to the next step
+                    Intent goToNextStep = new Intent(StepActivity.this, StepActivity.class);
+                    StepActivity.this.startActivity(goToNextStep);
+
+                }else {
+                    // move to the summary window
+                    Intent goToNextStep = new Intent(StepActivity.this, SummaryActivity.class);
+                    StepActivity.this.startActivity(goToNextStep);
+                }
+
+
 
 
             }
 
         });
+        }
 
 
-    }
+//    }
 
 
 
@@ -311,26 +407,26 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
         //add rullers
         //begin measure ruller
 
-        beginRuller =(ImageView) findViewById(R.id.beginRullerImageView);
-        beginRuller.setImageDrawable(getResources().getDrawable(R.drawable.right_ruller_4pt));
-        beginRuller.setOnTouchListener(new View.OnTouchListener(){
+        leftRuller =(ImageView) findViewById(R.id.leftRullerImageView);
+        leftRuller.setImageDrawable(getResources().getDrawable(R.drawable.right_ruller_4pt));
+        leftRuller.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                if(isPicLocked==true){
-                    beginRuller.bringToFront();
+                if (isPicLocked == true) {
+                    leftRuller.bringToFront();
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
-                            offset.set(event.getX()-beginRuller.getTranslationX(), event.getY());
+                            offset.set(event.getX() - leftRuller.getTranslationX(), event.getY());
                             Log.d("offset", offset.toString());
-                            mode=DRAG;
+                            mode = DRAG;
                             break;
 
                         case MotionEvent.ACTION_MOVE:
                             if (mode == DRAG) {
 
                                 //move just on the horizontal plane
-                                beginRuller.setTranslationX(event.getX()-offset.x);
-                                intervalBetweenRullers=endRuller.getX()-beginRuller.getX();
+                                leftRuller.setTranslationX(event.getX() - offset.x);
+                                intervalBetweenRullers = rightRuller.getX() - leftRuller.getX();
                                 intervalED.setText(Float.toString(intervalBetweenRullers));
 
                             }
@@ -342,36 +438,36 @@ public class ActivityPRIntervalStep3 extends ActionBarActivity implements View.O
 
 
                 }
-              return true;
+                return true;
             }
         });
 
 
         //end measure ruller
-        endRuller =(ImageView) findViewById(R.id.endRullerImageView);
-        endRuller.setImageDrawable(getResources().getDrawable(R.drawable.left_ruller_4pt));
-        endRuller.setOnTouchListener(new View.OnTouchListener(){
+        rightRuller =(ImageView) findViewById(R.id.rightRullerImageView);
+        rightRuller.setImageDrawable(getResources().getDrawable(R.drawable.left_ruller_4pt));
+        rightRuller.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                if(isPicLocked==true){
-                    endRuller.bringToFront();
+                if (isPicLocked == true) {
+                    rightRuller.bringToFront();
 
                     //starting the fade animation on the check button, since this is the next step
-                    checkButton= (ImageButton) findViewById(R.id.checkImageButton);
-                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(ActivityPRIntervalStep3.this,R.anim.fade);
+                    checkButton = (ImageButton) findViewById(R.id.checkImageButton);
+                    Animation myFadeInAnimation = AnimationUtils.loadAnimation(StepActivity.this, R.anim.fade);
                     checkButton.startAnimation(myFadeInAnimation);
 
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
-                            offset.set(event.getX()-endRuller.getTranslationX(), event.getY());
+                            offset.set(event.getX() - rightRuller.getTranslationX(), event.getY());
                             Log.d("offset", offset.toString());
-                            mode=DRAG;
+                            mode = DRAG;
                             break;
                         case MotionEvent.ACTION_MOVE:
                             if (mode == DRAG) {
 
                                 //move just on the horizontal plane
-                                endRuller.setTranslationX(event.getX()-offset.x);
-                                intervalBetweenRullers=endRuller.getX()-beginRuller.getX();
+                                rightRuller.setTranslationX(event.getX() - offset.x);
+                                intervalBetweenRullers = rightRuller.getX() - leftRuller.getX();
                                 intervalED.setText(Float.toString(intervalBetweenRullers));
                             }
 //                        case MotionEvent.ACTION_UP:
