@@ -20,14 +20,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/step1Text"
-                    android:text="Heart rate (RR interval:"
+                    android:id="@+id/t1"
+                    android:text="Heart rate (RR interval):"
                     android:textSize="10pt"
                     android:layout_marginBottom="25dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t2"
                 android:text="Rhythm:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -35,7 +35,7 @@
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/step1Text"
+            android:id="@+id/t3"
             android:text="PR interval:"
             android:textSize="10pt"
             android:layout_marginBottom="25dp"/>
@@ -43,7 +43,7 @@
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/step1Text"
+            android:id="@+id/t4"
             android:text="P wave height:"
             android:textSize="10pt"
             android:layout_marginBottom="25dp"/>
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t5"
                 android:text="P wave width:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -59,7 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t6"
                 android:text="QRS width:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t7"
                 android:text="QRS voltage:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -75,7 +75,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t8"
                 android:text="QTc interval:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -83,7 +83,7 @@
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/step1Text"
+            android:id="@+id/t9"
             android:text="Electrical axis:"
             android:textSize="10pt"
             android:layout_marginBottom="25dp"/>
@@ -91,7 +91,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t10"
                 android:text="Abnormal q waves:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -99,7 +99,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t11"
                 android:text="ST segment:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -107,7 +107,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t12"
                 android:text="Abnormal T waves:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>
@@ -115,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/step1Text"
+                android:id="@+id/t13"
                 android:text="U waves:"
                 android:textSize="10pt"
                 android:layout_marginBottom="25dp"/>

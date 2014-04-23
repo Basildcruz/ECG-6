@@ -14,6 +14,8 @@ public class HelperFunctions {
     private static boolean isFromCamera;
     private static Bitmap ecgBitmap;
     private static String ecgPicPath;
+    private static float [] dataFromStep= new float [14];
+    private static final Integer NUM_OF_STEPS = 3;
 
 
     public HelperFunctions(){
@@ -35,6 +37,22 @@ public class HelperFunctions {
         stepName[11]="Measure ST segment";
         stepName[12]="Look for abnormal T waves";
         stepName[13]="Look for U waves";
+
+        //initiate the data array:
+//        dataFromStep[0]= Float.valueOf(0);
+//        dataFromStep[1]= Float.valueOf(4);
+//        dataFromStep[2]= Float.valueOf(66);
+//        dataFromStep[3]= Float.valueOf(7);
+//        dataFromStep[4]= Float.valueOf(0);
+//        dataFromStep[5]= Float.valueOf(0);
+//        dataFromStep[6]= Float.valueOf(0);
+//        dataFromStep[7]= Float.valueOf(0);
+//        dataFromStep[8]= Float.valueOf(0);
+//        dataFromStep[9]= Float.valueOf(0);
+//        dataFromStep[10]= Float.valueOf(0);
+//        dataFromStep[11]= Float.valueOf(0);
+//        dataFromStep[12]= Float.valueOf(0);
+//        dataFromStep[13]= Float.valueOf(0);
 
     }
 
@@ -81,6 +99,18 @@ public class HelperFunctions {
 
     public static String getEcgPath(){
         return ecgPicPath;
+    }
+
+    public static void setDataInDataArry(int stepNumber, float data){
+        dataFromStep[stepNumber]=data;
+    }
+
+    public static float getDataOfSpecificStep(int stepNumber){
+        return dataFromStep[stepNumber];
+    }
+
+    public static int getMaxNumOfSteps(){
+        return NUM_OF_STEPS;
     }
 
 

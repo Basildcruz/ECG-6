@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -29,7 +28,7 @@ import android.widget.ImageView;
 
 public class StepActivity extends ActionBarActivity implements View.OnTouchListener {
 
-    private static final Integer NUM_OF_STEPS = 2;
+
 
     public ImageView ivOnGrid;
     public ImageView leftRuller;
@@ -100,7 +99,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
 
         //action bar settings
         ActionBar ab = getActionBar();
-        ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
+//        ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
         ab.setTitle(HelperFunctions.getStepName());
         ab.setSubtitle("step "+ activity_number.toString()+"/12");
 
@@ -118,6 +117,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
         intervalED=(EditText) findViewById(R.id.intervalEditText);
         intervalED.setText(Float.toString(intervalBetweenRullers));
         intervalED.bringToFront();
+
 
         //draw a grid
         MainLayout = (FrameLayout) findViewById(R.id.frame_layout_1);
@@ -152,6 +152,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
             HelperFunctions.setEcgBitmap(delegatedImageBitmap);
             ivOnGrid=(ImageView) findViewById(R.id.picImageView);
             ivOnGrid.setImageBitmap(delegatedImageBitmap);
+            delegatedImageBitmap.recycle();
             //get pic from gallery
         } else{
             String delegatedImagePath = (String) extras.get("picFromGallery");
@@ -167,8 +168,10 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
         ivOnGrid=(ImageView) findViewById(R.id.picImageView);
         if (HelperFunctions.getIsFromCamera()==true){
             ivOnGrid.setImageBitmap(HelperFunctions.getEcgBitmap());
+            HelperFunctions.getEcgBitmap().recycle();
         }else {
             ivOnGrid.setImageBitmap(getScaledBitmap(HelperFunctions.getEcgPath(), 800, 800));
+//            HelperFunctions.getEcgBitmap().recycle();
         }
 
         ivOnGrid.setTranslationX(HelperFunctions.getImageView().getTranslationX());
@@ -183,8 +186,6 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
     }
 
 
-//    private void addListenerOnButton() {
-
     public void addListenerToInfoButton(){
         infoIV = (ImageView)findViewById(R.id.infoImageView);
         switch (activity_number){
@@ -196,6 +197,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                 break;
 
         }
+
         infoIV.setVisibility(View.INVISIBLE);
         informationButton= (ImageButton) findViewById(R.id.infoImageButton);
         informationButton.setOnClickListener(new View.OnClickListener() {
@@ -220,53 +222,64 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
     }
 
 
-        public void addListenerToMeasureButton(){
+    public void addListenerToMeasureButton(){
         moveOrMeasureButton = (ImageButton) findViewById(R.id.moveOrMeasureImageButton);
 
-                    moveOrMeasureButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+        moveOrMeasureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                            //stoping the fade animation on the button, since the user used it
-                            moveOrMeasureButton.clearAnimation();
-
-
-                            if (isPicLocked == false) {
-                                isPicLocked = true;
-                                moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.movepic_32px));
-                                switch (activity_number){
-                                    case 3:
-                                        leftRuller.setVisibility(View.VISIBLE);
-                                        rightRuller.setVisibility(View.VISIBLE);
-                                        break;
-                                    case 5:
-                                        upRuller.setVisibility(View.VISIBLE);
-                                        downRuller.setVisibility(View.VISIBLE);
-                                        break;
-                                }
-                            } else if (isPicLocked == true) {
-                                isPicLocked = false;
-                                moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.measure_32px));
-                                switch (activity_number){
-                                    case 3:
-                                        leftRuller.setVisibility(View.VISIBLE);
-                                        rightRuller.setVisibility(View.VISIBLE);
-                                        break;
-                                    case 5:
-                                        upRuller.setVisibility(View.VISIBLE);
-                                        downRuller.setVisibility(View.VISIBLE);
-                                        break;
-                                }
-
-                            }
-                        }
-
-                    });
-
-         }
+                //stoping the fade animation on the button, since the user used it
+                moveOrMeasureButton.clearAnimation();
 
 
-        public void addListenerToCheckButton(){
+                if (isPicLocked == false) {
+                    isPicLocked = true;
+                    moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.movepic_32px));
+                    switch (activity_number){
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 6:
+                        case 11:
+                            leftRuller.setVisibility(View.VISIBLE);
+                            rightRuller.setVisibility(View.VISIBLE);
+                            break;
+                        case 2:
+                        case 7:
+                            upRuller.setVisibility(View.VISIBLE);
+                            downRuller.setVisibility(View.VISIBLE);
+                            break;
+                    }
+                } else if (isPicLocked == true) {
+                    isPicLocked = false;
+                    moveOrMeasureButton.setImageDrawable(getResources().getDrawable(R.drawable.measure_32px));
+                    switch (activity_number){
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 6:
+                        case 11:
+                            leftRuller.setVisibility(View.VISIBLE);
+                            rightRuller.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 2:
+                        case 7:
+                            upRuller.setVisibility(View.VISIBLE);
+                            downRuller.setVisibility(View.VISIBLE);
+                            break;
+                    }
+
+                }
+            }
+
+        });
+
+    }
+
+
+    public void addListenerToCheckButton(){
         checkButton= (ImageButton) findViewById(R.id.checkImageButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,10 +289,14 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                 checkButton.clearAnimation();
 
 
-                if(activity_number<=NUM_OF_STEPS){
+                if(activity_number<HelperFunctions.getMaxNumOfSteps()){
 
                     //save the ecg picture state
                     HelperFunctions.setImageView(ivOnGrid);
+
+//                    //save the measurment
+//                    HelperFunctions.setDataInDataArry(activity_number,intervalBetweenRullers);
+
                     // move to the next step
                     Intent goToNextStep = new Intent(StepActivity.this, StepActivity.class);
                     StepActivity.this.startActivity(goToNextStep);
@@ -290,16 +307,13 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                     StepActivity.this.startActivity(goToNextStep);
                 }
 
-
-
-
             }
 
         });
-        }
+    }
 
 
-//    }
+
 
 
 
@@ -428,6 +442,8 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                                 leftRuller.setTranslationX(event.getX() - offset.x);
                                 intervalBetweenRullers = rightRuller.getX() - leftRuller.getX();
                                 intervalED.setText(Float.toString(intervalBetweenRullers));
+                                //save the measurment
+                                HelperFunctions.setDataInDataArry(activity_number,intervalBetweenRullers);
 
                             }
 //                        case MotionEvent.ACTION_UP:
@@ -469,6 +485,8 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                                 rightRuller.setTranslationX(event.getX() - offset.x);
                                 intervalBetweenRullers = rightRuller.getX() - leftRuller.getX();
                                 intervalED.setText(Float.toString(intervalBetweenRullers));
+                                //save the measurment
+                                HelperFunctions.setDataInDataArry(activity_number,intervalBetweenRullers);
                             }
 //                        case MotionEvent.ACTION_UP:
 //                            mode = NONE;
@@ -625,7 +643,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_grid_activity2, container, false);
             return rootView;
         }
