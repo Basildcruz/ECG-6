@@ -1,5 +1,7 @@
 package com.main.ecg.app;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -18,11 +20,18 @@ public class SummaryActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.container, new PlaceholderFragment())
+//                    .commit();
+//        }
+
+        //action bar settings
+        android.app.ActionBar ab = getActionBar();
+//        ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
+        ab.setTitle("Summary sheet");
+//        ab.setSubtitle("step "+ activity_number.toString()+"/12");
+
     }
 
 

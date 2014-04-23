@@ -4,4 +4,140 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.main.ecg.app.SummaryActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame"
+    android:background="@drawable/blue_gradient_1">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/step1Text"
+                    android:text="Heart rate (RR interval:"
+                    android:textSize="10pt"
+                    android:layout_marginBottom="25dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="Rhythm:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/step1Text"
+            android:text="PR interval:"
+            android:textSize="10pt"
+            android:layout_marginBottom="25dp"/>
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/step1Text"
+            android:text="P wave height:"
+            android:textSize="10pt"
+            android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="P wave width:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="QRS width:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="QRS voltage:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="QTc interval:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/step1Text"
+            android:text="Electrical axis:"
+            android:textSize="10pt"
+            android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="Abnormal q waves:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="ST segment:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="Abnormal T waves:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/step1Text"
+                android:text="U waves:"
+                android:textSize="10pt"
+                android:layout_marginBottom="25dp"/>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+</FrameLayout>
+
+    <!--stepName[1]="Measure heart rate (RR interval)";-->
+    <!--stepName[2]="Determine rhythm";-->
+    <!--stepName[3]="Measure PR interval";-->
+    <!--stepName[4]="Measure P wave height and width";-->
+    <!--stepName[5]="Measure QRS width";-->
+    <!--stepName[6]="Measure QRS voltage";-->
+    <!--stepName[7]="Measure QT interval";-->
+    <!--stepName[8]="Determine electrical axis";-->
+    <!--stepName[9]="Determine R progression";-->
+    <!--stepName[10]="Look for abnormal q waves";-->
+    <!--stepName[11]="Measure ST segment";-->
+    <!--stepName[12]="Look for abnormal T waves";-->
+    <!--stepName[13]="Look for U waves";-->
