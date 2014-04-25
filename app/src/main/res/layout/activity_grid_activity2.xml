@@ -79,14 +79,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="#336699">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/moveOrMeasureImageButton"
-            android:src="@drawable/measure_32px"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -94,10 +88,14 @@
             android:id="@+id/infoImageButton"
             android:src="@drawable/info_32px"/>
 
-        <ImageView
+        <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:src="@drawable/line2"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/moveOrMeasureImageButton"
+            android:src="@drawable/measure_32px"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"/>
+
 
 
         <TextView
@@ -121,16 +119,21 @@
             android:layout_gravity="center"
             android:clickable="false"/>
 
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:src="@drawable/line2"/>
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Sec."
+            android:id="@+id/intervalTextView"
+            android:layout_gravity="center"/>
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/checkImageButton"
-            android:src="@drawable/check_32px"/>
+            android:src="@drawable/check_32px"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"/>
 
 
     </LinearLayout>

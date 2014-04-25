@@ -52,6 +52,9 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
     public Float initialRotation;
     public Float oldAngle;
     public float intervalBetweenRullers=0;
+    public float edge;
+    public float fromPixToSecFactor;
+
 
     public boolean isPicLocked=false;
     public boolean measureBtnWasClickd=false;
@@ -420,7 +423,6 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
 
         //add rullers
         //begin measure ruller
-
         leftRuller =(ImageView) findViewById(R.id.leftRullerImageView);
         leftRuller.setImageDrawable(getResources().getDrawable(R.drawable.right_ruller_4pt));
         leftRuller.setOnTouchListener(new View.OnTouchListener() {
@@ -441,7 +443,8 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                                 //move just on the horizontal plane
                                 leftRuller.setTranslationX(event.getX() - offset.x);
                                 intervalBetweenRullers = rightRuller.getX() - leftRuller.getX();
-                                intervalED.setText(Float.toString(intervalBetweenRullers));
+
+                                intervalED.setText(Float.toString((float) (intervalBetweenRullers/(edge/5)*0.04)));
                                 //save the measurment
                                 HelperFunctions.setDataInDataArry(activity_number,intervalBetweenRullers);
 
@@ -484,7 +487,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                                 //move just on the horizontal plane
                                 rightRuller.setTranslationX(event.getX() - offset.x);
                                 intervalBetweenRullers = rightRuller.getX() - leftRuller.getX();
-                                intervalED.setText(Float.toString(intervalBetweenRullers));
+                                intervalED.setText(Float.toString((float) (intervalBetweenRullers/(edge/5)*0.04)));
                                 //save the measurment
                                 HelperFunctions.setDataInDataArry(activity_number,intervalBetweenRullers);
                             }
@@ -515,9 +518,9 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);;
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setColor(Color.BLACK);
-            paint.setStrokeWidth(3);
+            paint.setStrokeWidth(2);
 
             float width = getWindowManager().getDefaultDisplay().getWidth();
             float height = getWindowManager().getDefaultDisplay().getHeight();
@@ -526,13 +529,16 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
 //            canvas.drawLines(pointsForGrid, 0, 0, paint);
 
             //horizontal lines
-            canvas.drawLine(0, (float) (height*0.2), width, (float) (height*0.2), paint);
-            canvas.drawLine(0, (float) (height*0.4), width, (float) (height*0.4), paint);
-            canvas.drawLine(0, (float) (height*0.6), width, (float) (height*0.6), paint);
-            canvas.drawLine(0, (float) (height*0.8), width, (float) (height*0.8), paint);
+            canvas.drawLine(0, (float) (height*0.15), width, (float) (height*0.15), paint);
+            canvas.drawLine(0, (float) (height*0.30), width, (float) (height*0.30), paint);
+            canvas.drawLine(0, (float) (height*0.45), width, (float) (height*0.45), paint);
+            canvas.drawLine(0, (float) (height*0.60), width, (float) (height*0.60), paint);
+            canvas.drawLine(0, (float) (height*0.75), width, (float) (height*0.75), paint);
+            canvas.drawLine(0, (float) (height*0.90), width, (float) (height*0.90), paint);
+
 
             //vertical lines
-            float edge=(float)(height*0.2);
+            edge=(float)(height*0.15); //num of pixels of a single square
             float endOfWidth=edge;
             while ( endOfWidth < width){
                 canvas.drawLine(endOfWidth ,0, endOfWidth, height , paint);
