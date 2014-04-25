@@ -101,7 +101,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
         ActionBar ab = getActionBar();
 //        ab.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#336699")));
         ab.setTitle(HelperFunctions.getStepName());
-        ab.setSubtitle("step "+ activity_number.toString()+"/12");
+        ab.setSubtitle("step "+ activity_number.toString()+"/"+ Integer.toString(HelperFunctions.getMaxNumOfSteps()));
 
         //things to do at the first step
         if (activity_number==1){
@@ -115,8 +115,8 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
 
         //interval edit text settings
         intervalED=(EditText) findViewById(R.id.intervalEditText);
-        intervalED.setText(Float.toString(intervalBetweenRullers));
-        intervalED.bringToFront();
+//        intervalED.setText(Float.toString(intervalBetweenRullers));
+//        intervalED.bringToFront();
 
 
         //draw a grid
@@ -260,14 +260,14 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                         case 5:
                         case 6:
                         case 11:
-                            leftRuller.setVisibility(View.VISIBLE);
-                            rightRuller.setVisibility(View.VISIBLE);
+                            leftRuller.setVisibility(View.INVISIBLE);
+                            rightRuller.setVisibility(View.INVISIBLE);
                             break;
 
                         case 2:
                         case 7:
-                            upRuller.setVisibility(View.VISIBLE);
-                            downRuller.setVisibility(View.VISIBLE);
+                            upRuller.setVisibility(View.INVISIBLE);
+                            downRuller.setVisibility(View.INVISIBLE);
                             break;
                     }
 
