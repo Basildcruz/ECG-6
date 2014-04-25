@@ -15,7 +15,7 @@ public class HelperFunctions {
     private static Bitmap ecgBitmap;
     private static String ecgPicPath;
     private static float [] dataFromStep= new float [14];
-    private static final Integer NUM_OF_STEPS = 3;
+    private static final Integer NUM_OF_STEPS = 2;
 
 
     public HelperFunctions(){

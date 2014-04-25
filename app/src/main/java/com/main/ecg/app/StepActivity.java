@@ -446,7 +446,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
 
                                 intervalED.setText(Float.toString((float) (intervalBetweenRullers/(edge/5)*0.04)));
                                 //save the measurment
-                                HelperFunctions.setDataInDataArry(activity_number,intervalBetweenRullers);
+                                HelperFunctions.setDataInDataArry(activity_number, (float) (intervalBetweenRullers/(edge/5)*0.04));
 
                             }
 //                        case MotionEvent.ACTION_UP:
@@ -489,7 +489,7 @@ public class StepActivity extends ActionBarActivity implements View.OnTouchListe
                                 intervalBetweenRullers = rightRuller.getX() - leftRuller.getX();
                                 intervalED.setText(Float.toString((float) (intervalBetweenRullers/(edge/5)*0.04)));
                                 //save the measurment
-                                HelperFunctions.setDataInDataArry(activity_number,intervalBetweenRullers);
+                                HelperFunctions.setDataInDataArry(activity_number, (float) (intervalBetweenRullers/(edge/5)*0.04));
                             }
 //                        case MotionEvent.ACTION_UP:
 //                            mode = NONE;

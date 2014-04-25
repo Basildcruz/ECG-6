@@ -115,7 +115,7 @@ public class SummaryActivity extends ActionBarActivity {
     private void setValueOnScreen(int i, TextView txt) {
         String s;
         s= (String) txt.getText();
-        txt.setText(s+" " + Float.toString(HelperFunctions.getDataOfSpecificStep(i)));
+        txt.setText(s+" " + Float.toString(HelperFunctions.getDataOfSpecificStep(i)).substring(0,4) +" Sec.");
     }
 
 
